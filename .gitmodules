@@ -1,0 +1,8 @@
+[submodule "project-document-through-pandoc-service"]
+	path = services/project-document-through-pandoc-service
+	url = https://github.com/red-cup-engineering/project-document-through-pandoc-service.git
+	branch = main
+[submodule "convert-org-to-markdown-service"]
+	path = services/convert-org-to-markdown-service
+	url = https://github.com/red-cup-engineering/convert-org-to-markdown-service.git
+	branch = main

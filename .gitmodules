@@ -1,0 +1,4 @@
+[submodule "services/project-document-through-pandoc-service"]
+	path = services/project-document-through-pandoc-service
+	url = https://github.com/red-cup-engineering/project-document-through-pandoc-service.git
+	branch = main

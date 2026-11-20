@@ -1,0 +1,51 @@
+{
+  "name": "@red-cup-engineering/pandoc-engine",
+  "version": "0.3.0-dev.0",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "description": "Plan and execute reproducible pandoc projections: one caller-scoped document projection, and a manuscript renderer (ordered parts, CSL-YAML bibliography, CSL style, pdf|html|docx|epub|jats) that returns a build receipt shaped to feed prov-o-provenance-service.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/red-cup-engineering/pandoc-engineering-services-section.git",
+    "directory": "apps/pandoc-engine"
+  },
+  "exports": {
+    ".": "./src/project-document-through-pandoc.mjs",
+    "./plan-manuscript-projection": "./bin/plan-manuscript-projection.mjs",
+    "./project-manuscript-through-pandoc": "./bin/project-manuscript-through-pandoc.mjs",
+    "./observe-pandoc-toolchain": "./bin/observe-pandoc-toolchain.mjs",
+    "./manuscript-plan": "./src/manuscript-plan.mjs",
+    "./manuscript-project": "./src/manuscript-project.mjs",
+    "./pandoc-toolchain": "./src/pandoc-toolchain.mjs"
+  },
+  "bin": {
+    "publish-book": "./bin/publish-book",
+    "plan-manuscript-projection": "./bin/plan-manuscript-projection.mjs",
+    "project-manuscript-through-pandoc": "./bin/project-manuscript-through-pandoc.mjs",
+    "observe-pandoc-toolchain": "./bin/observe-pandoc-toolchain.mjs",
+    "render-manuscript": "./bin/render-manuscript.mjs"
+  },
+  "files": [
+    "src",
+    "filters",
+    "bin",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "dependencies": {
+    "@red-cup-engineering/uri-engineering-services-section": "^0.1.7",
+    "@red-cup-engineering/node-js-function-engineering-services-section": "^0.5.4"
+  },
+  "engines": {
+    "node": ">=24.2.0"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/561-group/.github/blob/main/TIPS.md"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}

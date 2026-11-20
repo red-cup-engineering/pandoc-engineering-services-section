@@ -106,7 +106,12 @@ export async function projectManuscriptThroughPandoc(planOrRequest, ports = {}) 
     }
     const bytes = io.readFile(output.path);
     const used = new Set(output.argv);
-    const sourceIds = [...inputs, ...support.filter(item =>
+    const usedInputs = inputs.filter(item => {
+      if (item.role === "stylesheet") return used.has(`--css=${item.path}`);
+      if (item.role === "reference-doc") return used.has(`--reference-doc=${item.path}`);
+      return true;
+    });
+    const sourceIds = [...usedInputs, ...support.filter(item =>
       used.has(`--lua-filter=${item.path}`) || used.has(`--include-in-header=${item.path}`))].map(item => item.id);
     sourcesByOutput.set(output.path, sourceIds);
     outputs.push({ format: output.format, path: output.path, id: output.path, ni: io.address(bytes), bytes: bytes.byteLength, mediaType: output.mediaType, reproducibility: output.reproducibility });

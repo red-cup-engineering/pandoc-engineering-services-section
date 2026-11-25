@@ -17,14 +17,17 @@
     "./observe-pandoc-toolchain": "./bin/observe-pandoc-toolchain.mjs",
     "./manuscript-plan": "./src/manuscript-plan.mjs",
     "./manuscript-project": "./src/manuscript-project.mjs",
-    "./pandoc-toolchain": "./src/pandoc-toolchain.mjs"
+    "./pandoc-toolchain": "./src/pandoc-toolchain.mjs",
+    "./recover-source-document-from-html": "./bin/recover-source-document-from-html.mjs",
+    "./recover-source-document": "./src/recover-source-document.mjs"
   },
   "bin": {
     "publish-book": "./bin/publish-book",
     "plan-manuscript-projection": "./bin/plan-manuscript-projection.mjs",
     "project-manuscript-through-pandoc": "./bin/project-manuscript-through-pandoc.mjs",
     "observe-pandoc-toolchain": "./bin/observe-pandoc-toolchain.mjs",
-    "render-manuscript": "./bin/render-manuscript.mjs"
+    "render-manuscript": "./bin/render-manuscript.mjs",
+    "recover-source-document-from-html": "./bin/recover-source-document-from-html.mjs"
   },
   "files": [
     "src",
@@ -36,7 +39,8 @@
   ],
   "dependencies": {
     "@red-cup-engineering/uri-engineering-services-section": "^0.1.7",
-    "@red-cup-engineering/node-js-function-engineering-services-section": "^0.5.4"
+    "@red-cup-engineering/node-js-function-engineering-services-section": "^0.5.4",
+    "@red-cup-engineering/json-engine": "^0.5.0"
   },
   "engines": {
     "node": ">=24.2.0"

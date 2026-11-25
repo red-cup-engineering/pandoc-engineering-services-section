@@ -97,6 +97,39 @@ export async function observePandocToolchain({ pdfEngine? } = {}, ports = {})
 - Witness: the version lines.
 - Command: `observe-pandoc-toolchain` reads one `{pdfEngine?}` per line.
 
+### recoverSourceDocumentFromHtml
+
+~~~js
+export async function recoverSourceDocumentFromHtml(request, ports = {})
+~~~
+
+Recovers the document an exported HTML page was made from, when the page is the only copy. It reads Org Mode's
+HTML export and Hugo's output through pandoc and the shipped Lua filter `filters/recover-source-from-html.lua`,
+which takes only the content region (the element with id `content`, or an unnamed `main`), drops page chrome, the
+exporter's Backlinks section, section numbers and footnote back-references, and turns the exporter's footnote markup
+into notes.
+
+`request`: `{htmlPath, scratchDir}` plus optionally `rootDir` (`.`), `format` (`org` default | `gfm`), `linkTargets`
+(a map from a page address as it appears in the page, `slug.html` or a full URL, to the address to write instead),
+`minimumMatch` (0.995) and `date`. `htmlPath` and `scratchDir` are relative to `rootDir`; the filter is written under
+`scratchDir` once.
+
+- Returns `{ok: true, document, verification}`. `document` = `{format, source, title, date?, keywords, links: {rewritten, unresolved}, text}`:
+  `source` opens with the title, date (a `#+date` line the author wrote, else the first timestamp in the title) and the
+  page's tags as `#+keywords`, then the body; a line that opens `#+word` is kept as the Org keyword line it was.
+  `verification` = `{originalWords, recoveredWords, matchedWords, match, minimumMatch, passed}`: the source is rendered
+  back to plain text by pandoc and compared, word by word and in order (longest common subsequence), with the plain
+  text of the page's content region. Typographic quotes and dashes are folded to the characters the author typed, and
+  footnote markers are not counted. A document below `minimumMatch` is reported with `passed: false`; the caller keeps
+  its page.
+- Refusals: `InvalidRequest`, `PathEscapesRoot`, `UnsupportedFormat`, `NoTitle`, `PandocFailed`.
+- Effect class: runs `pandoc`; writes the filter under `scratchDir`.
+- Witness: `verification`.
+- Command: `recover-source-document-from-html` reads one request per line.
+
+Known limits, each shown by a failed verification and so never silent: Org link descriptions that contain square
+brackets, headings deeper than level six (`h7`), and bare `<li>` elements outside a list.
+
 ## Invocation
 
 ```sh

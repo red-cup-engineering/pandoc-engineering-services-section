@@ -11,18 +11,20 @@ export function niOf(bytes) {
 /**
  * Run a program and collect its output. Never throws: a program that cannot start reports
  * `status: null` and the reason in `error`.
- * @param {{command: string, argv: string[], cwd?: string, env?: Record<string,string>}} call
+ * `input`, when given, is written to the program's standard input.
+ * @param {{command: string, argv: string[], cwd?: string, env?: Record<string,string>, input?: string}} call
  */
-export function runProgram({ command, argv, cwd, env }) {
+export function runProgram({ command, argv, cwd, env, input }) {
   return new Promise((resolve) => {
     let child;
     try {
-      child = spawn(command, argv, { cwd, env: { ...process.env, ...env }, stdio: ["ignore", "pipe", "pipe"] });
+      child = spawn(command, argv, { cwd, env: { ...process.env, ...env }, stdio: [input === undefined ? "ignore" : "pipe", "pipe", "pipe"] });
     } catch (error) {
       resolve({ status: null, stdout: "", stderr: "", error: error.message });
       return;
     }
     const out = [], err = [];
+    if (input !== undefined) { child.stdin.on("error", () => {}); child.stdin.end(input); }
     child.stdout.on("data", (chunk) => out.push(chunk));
     child.stderr.on("data", (chunk) => err.push(chunk));
     child.on("error", (error) => resolve({ status: null, stdout: "", stderr: "", error: error.message }));
@@ -34,7 +36,7 @@ export function runProgram({ command, argv, cwd, env }) {
 export function nodePorts(rootDir = ".") {
   const at = (path) => join(rootDir, path);
   return {
-    runPandoc: ({ command = "pandoc", argv, env }) => runProgram({ command, argv, cwd: rootDir, env }),
+    runPandoc: ({ command = "pandoc", argv, env, input }) => runProgram({ command, argv, cwd: rootDir, env, input }),
     exists: (path) => existsSync(at(path)),
     readFile: (path) => new Uint8Array(readFileSync(at(path))),
     // Support files may sit in subdirectories of the output directory (shipped filters in .filters/).
